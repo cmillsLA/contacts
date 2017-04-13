@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import IconNavCancelCircle from 'material-ui/svg-icons/navigation/cancel';
+import IconSearch from 'material-ui/svg-icons/action/search';
 import {Table, Column, Cell} from 'fixed-data-table';
 import './App.css';
 
@@ -27,6 +28,7 @@ const muiTheme = getMuiTheme({
   fontFamily: 'Helvetica Neue, Lato, sans-serif',
 });
 
+// Table.
 var SortTypes = {
   ASC: 'ASC',
   DESC: 'DESC',
@@ -68,8 +70,13 @@ class SortHeaderCell extends React.Component {
   }
 }
 
+function _ckColumnName(name) {
+  return name.replace(/([A-Z])/g, ' $1').trim();
+}
+
 const TextCell = ({rowIndex, data, columnKey, ...props}) => (
   <Cell {...props}>
+    <span className="ck-responsive-th">{_ckColumnName(columnKey)}</span>
     {data.getObjectAt(rowIndex)[columnKey]}
   </Cell>
 );
@@ -91,6 +98,28 @@ class DataListWrapper {
   }
 }
 
+const tablestyles = {
+  errorStyle: {
+    color: '#f58025',
+  },
+  underlineStyle: {
+    borderColor: '#fff',
+    bottom: '6px',
+    left: '6px',
+  },
+  underlineStyleTextarea: {
+    borderColor: '#fff',
+    bottom: '5px',
+  },
+  underlineFocusStyle: {
+    borderColor: '#f58025'
+  },
+  hintStyles: {
+    bottom:'17px',
+    left: '8px',
+  },
+};
+
 class SortExample extends React.Component {
   constructor(props) {
     super(props);
@@ -106,11 +135,95 @@ class SortExample extends React.Component {
     this.state = {
       sortedDataList: this._dataList,
       colSortDirs: {},
+      tableWidth  : 1000,
+      tableHeight : 500,
+      filterval: ''
     };
 
     this.ckTableWidth = window.offsetWidth - 80;
 
     this._onSortChange = this._onSortChange.bind(this);
+    this._update = this._update.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+    this._onFilterSubmit = this._onFilterSubmit.bind(this);
+    this._onBlurChange = this._onBlurChange.bind(this);
+  }
+
+  componentDidMount() {
+    var win = window;
+    if (win.addEventListener) {
+      win.addEventListener('resize', this._update, false);
+    } else if (win.attachEvent) {
+      win.attachEvent('onresize', this._update);
+    } else {
+      win.onresize = this._update;
+    }
+    this._update();
+  }
+
+  componentWillReceiveProps(props) {
+    this._update();
+  }
+
+  componentWillUnmount() {
+    var win = window;
+    if(win.removeEventListener) {
+      win.removeEventListener('resize', this._update, false);
+    } else if(win.removeEvent) {
+      win.removeEvent('onresize', this._update, false);
+    } else {
+      win.onresize = null;
+    }
+  }
+
+  _onFilterChange(e) {
+    this.setState({
+      filterval: e.target.value,
+    });
+  }
+
+  _onBlurChange(e) {
+    if(!e.target.value) {
+      this.setState({
+        sortedDataList: this._dataList,
+      });
+    }
+  }
+
+  _onFilterSubmit(e) {
+    e.preventDefault();
+    if (!this.state.filterval) {
+      this.setState({
+        sortedDataList: this._dataList,
+      });
+    }
+    var filterBy = this.state.filterval.toLowerCase();
+    var size = this._dataList.getSize();
+    var filteredIndexes = [];
+    var filterFound = (firstName, lastName, email) => {
+      return firstName.toLowerCase().indexOf(filterBy) !== -1 ||
+      lastName.toLowerCase().indexOf(filterBy) !== -1 ||
+      email.toLowerCase().indexOf(filterBy) !== -1
+    };
+    for (var index = 0; index < size; index++) {
+      var {firstName} = this._dataList.getObjectAt(index);
+      var {lastName} = this._dataList.getObjectAt(index);
+      var {email} = this._dataList.getObjectAt(index);
+      if (filterFound(firstName, lastName, email)) {
+        filteredIndexes.push(index);
+      }
+    }
+
+    this.setState({
+      sortedDataList: new DataListWrapper(filteredIndexes, this._dataList),
+    });
+
+  }
+
+  _update() {
+    this.setState({
+      tableWidth  : window.innerWidth - 80
+    });
   }
 
   _onSortChange(columnKey, sortDir) {
@@ -140,88 +253,127 @@ class SortExample extends React.Component {
     });
   }
 
-  _getWindowWidth() {
-    return window.innerWidth - 80;
-  }
-
   render() {
     var {sortedDataList, colSortDirs} = this.state;
     return (
-      <Table
-        rowHeight={50}
-        rowsCount={sortedDataList.getSize()}
-        headerHeight={50}
-        width={this._getWindowWidth()}
-        height={500}
-        {...this.props}>
-        <Column
-          columnKey="id"
-          header={
-            <SortHeaderCell
-              onSortChange={this._onSortChange}
-              sortDir={colSortDirs.id}>
-              id
-            </SortHeaderCell>
-          }
-          cell={<TextCell data={sortedDataList} />}
-          width={100}
-          fixed={true}
-        />
-        <Column
-          columnKey="firstName"
-          header={
-            <SortHeaderCell
-              onSortChange={this._onSortChange}
-              sortDir={colSortDirs.firstName}>
-              First Name
-            </SortHeaderCell>
-          }
-          cell={<TextCell data={sortedDataList} />}
-          width={200}
-          flexGrow={2}
-        />
-        <Column
-          columnKey="lastName"
-          header={
-            <SortHeaderCell
-              onSortChange={this._onSortChange}
-              sortDir={colSortDirs.lastName}>
-              Last Name
-            </SortHeaderCell>
-          }
-          cell={<TextCell data={sortedDataList} />}
-          width={200}
-          flexGrow={1}
-        />
-        <Column
-          columnKey="city"
-          header={
-            <SortHeaderCell
-              onSortChange={this._onSortChange}
-              sortDir={colSortDirs.city}>
-              City
-            </SortHeaderCell>
-          }
-          cell={<TextCell data={sortedDataList} />}
-          width={200}
-        />
-        <Column
-          columnKey="companyName"
-          header={
-            <SortHeaderCell
-              onSortChange={this._onSortChange}
-              sortDir={colSortDirs.companyName}>
-              Company Name
-            </SortHeaderCell>
-          }
-          cell={<TextCell data={sortedDataList} />}
-          width={200}
-        />
-      </Table>
+      <div>
+        <div className="ck-table-filter ck-align-left ck-mb10">
+          <form onSubmit={this._onFilterSubmit}>
+            <TextField
+                className="ck-input-text ck-table-filter-input ck-inline"
+                underlineStyle={tablestyles.underlineStyle}
+                underlineFocusStyle={tablestyles.underlineFocusStyle}
+                hintText="Search by First Name, Last Name, or Email"
+                hintStyle={tablestyles.hintStyles}
+                value={this.state.filterval}
+                onChange={this._onFilterChange}
+                onBlur={this._onBlurChange}
+              />
+            <RaisedButton
+              secondary={true}
+              onTouchTap={this.handleOpen}
+              icon={<IconSearch />}
+              className="ck-clear-uppercase ck-inline ck-btn-table-filter-search"
+              onClick={this._onFilterSubmit}
+            />
+          </form>
+        </div>
+        <Table
+          rowHeight={35}
+          rowsCount={sortedDataList.getSize()}
+          headerHeight={35}
+          width={this.state.tableWidth}
+          height={((sortedDataList.getSize() + 1) * 35) + 2}
+          {...this.props}>
+          <Column
+            columnKey="firstName"
+            columnDesc="First Name"
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                sortDir={colSortDirs.firstName}>
+                First Name
+              </SortHeaderCell>
+            }
+            cell={<TextCell data={sortedDataList} />}
+            width={150}
+            flexGrow={2}
+          />
+          <Column
+            columnKey="lastName"
+            columnDesc="Last Name"
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                sortDir={colSortDirs.lastName}>
+                Last Name
+              </SortHeaderCell>
+            }
+            cell={<TextCell data={sortedDataList} />}
+            width={150}
+            flexGrow={1}
+          />
+          <Column
+            columnKey="dob"
+            columnDesc="Date of Birth"
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                sortDir={colSortDirs.dob}>
+                Date of Birth
+              </SortHeaderCell>
+            }
+            cell={<TextCell data={sortedDataList} />}
+            width={125}
+          />
+          <Column
+            columnKey="phone"
+            columnDesc="Phone"
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                sortDir={colSortDirs.phone}>
+                Phone
+              </SortHeaderCell>
+            }
+            cell={<TextCell data={sortedDataList} />}
+            width={150}
+          />
+          <Column
+            columnKey="email"
+            columnDesc="Email"
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                sortDir={colSortDirs.email}>
+                Email
+              </SortHeaderCell>
+            }
+            cell={<TextCell data={sortedDataList} />}
+            width={200}
+            flexGrow={2}
+          />
+          <Column
+            columnKey="notes"
+            columnDesc="Notes"
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                sortDir={colSortDirs.notes}>
+                Notes
+              </SortHeaderCell>
+            }
+            cell={<TextCell data={sortedDataList} />}
+            width={300}
+            flexGrow={3}
+          />
+        </Table>
+      </div>
     );
   }
 }
 
+// Contact Form.
 const styles = {
   errorStyle: {
     color: '#f58025',
@@ -354,17 +506,14 @@ class NewContact extends React.Component {
 
     return (
       <div>
-        <div className="ck-row ck-mb20">
-          <div className="ck-row-half ck-align-left">Search Bar</div>
-          <div className="ck-row-half ck-align-right">
-            <RaisedButton
-              label="Contacts Keeper"
-              secondary={true}
-              onTouchTap={this.handleOpen}
-              icon={<IconContentAddCircle />}
-              className="ck-clear-uppercase ck-btn-dialog"
-            />
-          </div>
+        <div className="ck-row-half ck-right ck-align-right">
+          <RaisedButton
+            label="Contacts Keeper"
+            secondary={true}
+            onTouchTap={this.handleOpen}
+            icon={<IconContentAddCircle />}
+            className="ck-clear-uppercase ck-btn-dialog"
+          />
         </div>
         <Dialog
           title="Contacts Keeper"

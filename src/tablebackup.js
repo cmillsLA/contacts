@@ -1,106 +1,90 @@
-class MyTextCell extends React.Component {
-  render() {
-    const {rowIndex, field, data, ...props} = this.props;
-    return (
-      <Cell {...props}>
-        {data[rowIndex][field]}
-      </Cell>
-    );
-  }
-}
 
-class MyLinkCell extends React.Component {
-  render() {
-    const {rowIndex, field, data, ...props} = this.props;
-    const link = data[rowIndex][field];
-    return (
-      <Cell {...props}>
-        <a href={link}>{link}</a>
-      </Cell>
-    );
-  }
-}
-
-class MyTable extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      myTableData: [
-        {firstName: 'Rylan', lastName: 'Test', dob: '01-01-2000', phone: '555-555-5555', email: 'Test@test.com', notes: 'N/A' },
-        {firstName: 'Test', lastName: 'Tester', dob: '01-01-2000', phone: '555-555-5555', email: 'Test@test.com', notes: 'N/A' }
-      ],
-    };
-  }
 
   render() {
+    var {sortedDataList, colSortDirs} = this.state;
     return (
       <Table
-        rowsCount={this.state.myTableData.length}
         rowHeight={35}
+        rowsCount={sortedDataList.getSize()}
         headerHeight={35}
-        width={window.innerWidth - 80}
-        height={(this.state.myTableData.length * 36) + 36}
-        style={{diksplay: 'inline-block'}}>
+        width={this._getWindowWidth()}
+        height={((sortedDataList.getSize() + 1) * 35) + 2}
+        {...this.props}>
         <Column
-          header={<Cell>First Name</Cell>}
-          cell={
-            <MyTextCell
-              data={this.state.myTableData}
-              field="firstName"
-            />
+          columnKey="firstName"
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs.firstName}>
+              First Name
+            </SortHeaderCell>
           }
-          width={(window.innerWidth - 80) / 6}
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
+          flexGrow={2}
         />
         <Column
-          header={<Cell>Last Name</Cell>}
-          cell={
-            <MyTextCell
-              data={this.state.myTableData}
-              field="lastName"
-            />
+          columnKey="lastName"
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs.lastName}>
+              Last Name
+            </SortHeaderCell>
           }
-          width={(window.innerWidth - 80) / 6}
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
+          flexGrow={1}
         />
         <Column
-          header={<Cell>Date of Birth</Cell>}
-          cell={
-            <MyTextCell
-              data={this.state.myTableData}
-              field="dob"
-            />
+          columnKey="dob"
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs.dob}>
+              Date of Birth
+            </SortHeaderCell>
           }
-          width={(window.innerWidth - 80) / 6}
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
         />
         <Column
-          header={<Cell>Phone</Cell>}
-          cell={
-            <MyTextCell
-              data={this.state.myTableData}
-              field="phone"
-            />
+          columnKey="phone"
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs.phone}>
+              Phone
+            </SortHeaderCell>
           }
-          width={(window.innerWidth - 80) / 6}
+          cell={<TextCell data={sortedDataList} />}
+          width={100}
         />
         <Column
-          header={<Cell>Email</Cell>}
-          cell={
-            <MyTextCell
-              data={this.state.myTableData}
-              field="email"
-            />
+          columnKey="email"
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs.email}>
+              Email
+            </SortHeaderCell>
           }
-          width={(window.innerWidth - 80) / 6}
+          cell={<TextCell data={sortedDataList} />}
+          width={200}
+          flexGrow={2}
         />
         <Column
-          header={<Cell>Notes</Cell>}
-          cell={
-            <MyTextCell
-              data={this.state.myTableData}
-              field="notes"
-            />
+          columnKey="notes"
+          header={
+            <SortHeaderCell
+              onSortChange={this._onSortChange}
+              sortDir={colSortDirs.notes}>
+              Notes
+            </SortHeaderCell>
           }
-          width={(window.innerWidth - 80) / 6}
+          cell={<TextCell data={sortedDataList} />}
+          width={300}
+          flexGrow={3}
         />
       </Table>
     );

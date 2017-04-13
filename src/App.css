@@ -18,16 +18,89 @@ body {
 	text-align:left;
 }
 .ck-mb20 {
-	margin-bottom:30px;
+	margin-bottom:20px;
+}
+.ck-mb10 {
+	margin-bottom:10px;
+}
+.ck-inline {
+	display:inline;
 }
 
 /* Datatable */
+.ck-table-filter {
+	width:500px;
+}
+.ck-input-text.ck-table-filter-input {
+	width:330px !important;
+}
+.ck-input-text.ck-table-filter-input
+input[type=text] {
+	border-top-right-radius:0 !important;
+	border-bottom-right-radius:0 !important;
+}
+.ck-btn-table-filter-search {
+	min-width:44px !important;
+	position:relative;
+	left:15px;
+	border:1px solid #216fb5;
+	border-top-right-radius:5px !important;
+	border-bottom-right-radius:5px !important;
+}
 th {
 	background-color:#666 !important;
 	color:#fff !important;
 	font-weight:normal !important;
 	height: auto !important;
 }
+.ck-responsive-th {
+	display:none;
+}
+.public_fixedDataTable_header,
+.public_fixedDataTable_header
+.public_fixedDataTableCell_main {
+	background-image:none !important;
+	background-color:#666 !important;
+	color:#fff !important;
+	font-weight:normal !important;
+	font-size:12px !important;
+}
+.public_fixedDataTable_header
+.public_fixedDataTableCell_cellContent a {
+	cursor:pointer;
+}
+.public_fixedDataTableCell_cellContent {
+	font-size:12px;
+}
+/* Responsive */
+/*.public_fixedDataTable_main,
+.public_fixedDataTableCell_main,
+.fixedDataTableLayout_hasBottomBorder {
+	border:none !important;
+}
+.public_fixedDataTableCell_main {
+	text-align:right !important;
+}
+.public_fixedDataTable_header {
+	display:none;
+}
+.fixedDataTableCellLayout_main,
+.fixedDataTableCellLayout_wrap1 {
+	width:100% !important;
+}
+.ck-responsive-th {
+	text-transform:capitalize;
+	float:left;
+	display:inline-block;
+}
+.fixedDataTableRowLayout_rowWrapper {
+	height:auto !important;
+	position:relative;
+}
+.fixedDataTableCellLayout_main.public_fixedDataTableCell_main {
+	position:relative !important;
+	left:0 !important;
+}*/
 /* */
 
 /* Form Styles */
@@ -73,6 +146,9 @@ h3 {
 .ck-align-right {
 	text-align:right;
 }
+.ck-right {
+	float:right;
+}
 .ck-input-text {
 	width:95% !important;
 	overflow:visible;
@@ -85,7 +161,7 @@ h3 {
 input[type=text],
 .ck-input-text
 textarea {
-	border:1px solid #000 !important;
+	border:1px solid #666 !important;
 	border-radius: 5px;
 	padding-left: 5px !important;
 	padding-right: 5px !important;

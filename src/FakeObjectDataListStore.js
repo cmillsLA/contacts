@@ -22,10 +22,10 @@ class FakeObjectDataListStore {
     return {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      dob: faker.date.past(),
+      dob: faker.lorem.word(),
       phone: faker.phone.phoneNumber(),
       email: faker.internet.email(),
-      notes: faker.lorem.sentencec(),
+      notes: faker.lorem.sentence(),
     };
   }
 

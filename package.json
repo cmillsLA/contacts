@@ -4,8 +4,11 @@
   "private": true,
   "dependencies": {
     "babel-polyfill": "^6.23.0",
+    "fixed-data-table": "^0.6.3",
+    "material-ui": "^0.17.3",
     "react": "^15.5.3",
-    "react-dom": "^15.5.3",
+    "react-dom": "^15.5.4",
+    "react-redux": "^5.0.4",
     "react-router": "^4.0.0"
   },
   "devDependencies": {
