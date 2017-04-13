@@ -1,0 +1,115 @@
+body {
+	font-family:Roboto, sans-serif;
+}
+.ck-container {
+  text-align: center;
+}
+.ck-content {
+	padding:40px;
+}
+.ck-h1 {
+	background-color:#f58025;
+	border-bottom:18px solid #ccc;
+	color:#fff;
+	margin:0;
+	padding:18px 40px;
+	font-weight:normal;
+	font-size:16px;
+	text-align:left;
+}
+.ck-mb20 {
+	margin-bottom:30px;
+}
+
+/* Datatable */
+th {
+	background-color:#666 !important;
+	color:#fff !important;
+	font-weight:normal !important;
+	height: auto !important;
+}
+/* */
+
+/* Form Styles */
+.ck-dialog-cancel {
+	position: absolute !important;
+	top:5px;
+	right:10px;
+	min-width:40px !important;
+}
+.ck-btn-dialog button,
+.ck-btn-dialog button div {
+	height: 38px !important;
+	line-height: 34px !important;
+}
+h3 {
+	border-bottom:0 !important;
+}
+.ck-dialog-header {
+	background-color:#216fb5;
+	margin-bottom:20px;
+	color:#fff !important;
+}
+.ck-form-contacts {
+	padding-top:35px;
+}
+.ck-overflow-y-scroll {
+	overflow-y:scroll !important;
+}
+.ck-clear-uppercase span {
+	text-transform: none !important;
+}
+.ck-row {
+	width:100%;
+}
+.ck-row-half {
+	display:inline-block;
+	width:50%;
+	text-align:center;
+}
+.ck-align-left {
+	text-align:left;
+}
+.ck-align-right {
+	text-align:right;
+}
+.ck-input-text {
+	width:95% !important;
+	overflow:visible;
+}
+.ck-input-textarea {
+	margin-left:10px;
+	width:97% !important;
+}
+.ck-input-text
+input[type=text],
+.ck-input-text
+textarea {
+	border:1px solid #000 !important;
+	border-radius: 5px;
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+}
+.ck-input-text
+input[type=text] {
+	height:35px !important;
+}
+.ck-input-text
+textarea {
+	min-height: 35px !important;
+	width:100%;
+}
+.ck-input-text
+label {
+	top:14px !important;
+	font-size: 18px;
+}
+.ck-input-textarea
+label {
+	top:34px !important;
+}
+.ck-form-contacts
+label {
+	color:#000 !important;
+}
+/* */
