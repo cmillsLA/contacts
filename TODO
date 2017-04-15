@@ -1,20 +1,9 @@
+1. Datatable feed from store
+2. Hookup filter and search
+3. Datatable responsive styles
+4. Unit tests
+5. Separate components and css into directories
 
-
-
-4. Install redux and remove components to external directories
-
-6. Unit tests
-7. Form submission
-9. Datatable search filter
-
-11. Masking for phone number
-12. Masking for dob
-13. Form Validation
-
-15. Favicon
-
-17. Datatable sorting
-18. Datatable resize
 
 
 

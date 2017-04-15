@@ -1,9 +1,12 @@
 //import 'babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import todoApp from './reducers';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-//import PropTypes from 'prop-types';
-//import { Router, Route, Switch } from 'react-router';
+
+let store = createStore(todoApp)
 
 // Temporarily needed for Material UI
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -17,6 +20,8 @@ import './index.css';
 import './fixed-data-table.min.css';
 
 ReactDOM.render(
-  <App />,
+	<Provider store={store}>
+		<App />
+	</Provider>,
   document.getElementById('root')
 );
