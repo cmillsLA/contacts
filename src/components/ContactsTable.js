@@ -104,7 +104,7 @@ class ContactsTable extends React.Component {
   constructor(props) {
     super(props);
 
-    this._dataList = new RealObjectDataListStore(2);
+    this._dataList = new RealObjectDataListStore(10);
 
     this._defaultSortIndexes = [];
     var size = this._dataList.getSize();

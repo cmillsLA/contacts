@@ -196,9 +196,119 @@ label {
 		width:40% !important;
 	}
 }
-@media only screen (max-width : 868px) {
+@media only screen and (min-width : 320px) and (max-width : 1024px) {
+	body {
+		overflow-x:hidden;
+	}
 	.ck-dialog-content {
 		width:85% !important;
+	}
+	.ck-content {
+		padding:20px 0 !important;
+		text-align:center;
+	}
+	.ck-table-filter {
+		padding-left:20px;
+		display:none !important;
+	}
+	.ck-btn-contacts-keeper {
+		padding-right:20px;
+		display:none !important;
+
+	}
+	/* Table */
+	.public_fixedDataTable_main {
+		display:inline-block !important;
+	}
+	.public_fixedDataTable_main,
+	.public_fixedDataTableCell_main,
+	.fixedDataTableLayout_hasBottomBorder {
+		border:none !important;
+		margin:0 !important;
+	}
+	.public_fixedDataTableCell_main {
+		text-align:right !important;
+	}
+	.public_fixedDataTable_header,
+	.fixedDataTableCellGroupLayout_cellGroup,
+	.ScrollbarLayout_mainVertical,
+	.fixedDataTableLayout_horizontalScrollbar,
+	.fixedDataTableLayout_bottomShadow,
+	.fixedDataTableLayout_topShadow {
+		display:none !important;
+	}
+	.fixedDataTableCellLayout_main,
+	.fixedDataTableCellLayout_wrap1,
+	.fixedDataTableCellLayout_wrap2,
+	.fixedDataTableCellLayout_wrap3,
+	.fixedDataTableCellGroupLayout_cellGroupWrapper {
+		width:93vw !important;
+	}
+	.ck-responsive-th {
+		text-transform:capitalize;
+		float:left;
+		display:inline-block;
+	}
+	.fixedDataTableRowLayout_rowWrapper {
+		height:auto !important;
+		position:relative;
+	}
+	.fixedDataTableCellLayout_main.public_fixedDataTableCell_main {
+		position:relative !important;
+		left:0 !important;
+	}
+	.fixedDataTableLayout_main,
+	.fixedDataTableRowLayout_main,
+	.fixedDataTableLayout_rowsContainer,
+	.fixedDataTableRowLayout_rowWrapper {
+		width:96vw !important;
+		display: block;
+	}
+	.fixedDataTableRowLayout_body,
+	.fixedDataTableCellGroupLayout_cellGroupWrapper {
+		position:relative !important;
+	}
+	.fixedDataTableRowLayout_main,
+	.fixedDataTableCellLayout_main,
+	.fixedDataTableCellLayout_wrap1,
+	.fixedDataTableRowLayout_body,
+	.fixedDataTableCellGroupLayout_cellGroupWrapper,
+	.fixedDataTableCellGroupLayout_cellGroup {
+		height: auto !important;
+		min-height:45px;
+	}
+	.fixedDataTableRowLayout_main,
+	.public_fixedDataTable_main,
+	.fixedDataTableLayout_rowsContainer {
+		overflow:visible !important;
+		position:relative !important;
+	}
+	.public_fixedDataTable_main,
+	.fixedDataTableLayout_rowsContainer {
+		position:relative !important;
+		height:auto !important;
+		min-height:100vh;
+	}
+	.fixedDataTableCellGroupLayout_cellGroup,
+	.fixedDataTableCellGroupLayout_cellGroup > .public_fixedDataTableCell_main {
+		display:block !important;
+	}
+	.fixedDataTableRowLayout_rowWrapper,
+	.fixedDataTableCellGroupLayout_cellGroup {
+		position:relative !important;
+	}
+	.fixedDataTableCellGroupLayout_cellGroupWrapper,
+	.fixedDataTableCellGroupLayout_cellGroup {
+		min-height:0 !important;
+	}
+	.fixedDataTableRowLayout_body {
+		padding:0 10px;
+	}
+	.fixedDataTableCellGroupLayout_cellGroup {
+		width:94vw !important;
+	}
+	.fixedDataTableCellGroupLayout_cellGroup {
+		transform: none !important;
 	}
 }
 /* */
@@ -250,69 +360,6 @@ label {
 	}
 	.ck-mb20-mobile {
 		margin-bottom:20px;
-	}
-	/* Table */
-	.public_fixedDataTable_main,
-	.public_fixedDataTableCell_main,
-	.fixedDataTableLayout_hasBottomBorder {
-		border:none !important;
-	}
-	.public_fixedDataTableCell_main {
-		text-align:right !important;
-	}
-	.public_fixedDataTable_header {
-		display:none;
-	}
-	.fixedDataTableCellLayout_main,
-	.fixedDataTableCellLayout_wrap1 {
-		width:100% !important;
-	}
-	.ck-responsive-th {
-		text-transform:capitalize;
-		float:left;
-		display:inline-block;
-	}
-	.fixedDataTableRowLayout_rowWrapper {
-		height:auto !important;
-		position:relative;
-	}
-	.fixedDataTableCellLayout_main.public_fixedDataTableCell_main {
-		position:relative !important;
-		left:0 !important;
-	}
-	.fixedDataTableLayout_main,
-	.fixedDataTableRowLayout_main,
-	.fixedDataTableLayout_rowsContainer,
-	.fixedDataTableRowLayout_rowWrapper {
-		width:100% !important;
-	}
-	.fixedDataTableRowLayout_body,
-	.fixedDataTableCellGroupLayout_cellGroupWrapper {
-		position:relative;
-	}
-	.fixedDataTableRowLayout_main,
-	.fixedDataTableCellLayout_main,
-	.fixedDataTableCellLayout_wrap1,
-	.fixedDataTableRowLayout_body,
-	.fixedDataTableCellGroupLayout_cellGroupWrapper,
-	.fixedDataTableCellGroupLayout_cellGroup {
-		height: auto !important;
-		min-height:45px;
-	}
-	.fixedDataTableRowLayout_main,
-	.public_fixedDataTable_main,
-	.fixedDataTableLayout_rowsContainer {
-		overflow:visible !important;
-		position:relative;
-	}
-	.public_fixedDataTable_main,
-	.fixedDataTableLayout_rowsContainer {
-		height:auto !important;
-		min-height:100vh;
-	}
-	.fixedDataTableCellGroupLayout_cellGroup,
-	.fixedDataTableCellGroupLayout_cellGroup > .public_fixedDataTableCell_main {
-		display:block !important;
 	}
 }
 /* */

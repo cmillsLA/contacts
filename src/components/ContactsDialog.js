@@ -33,7 +33,7 @@ class ContactsDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="ck-row-half ck-row-40-tablet ck-right ck-align-right ck-align-center-mobile ck-mb20-mobile">
+        <div className="ck-btn-contacts-keeper ck-row-half ck-row-40-tablet ck-right ck-align-right ck-align-center-mobile ck-mb20-mobile">
           <RaisedButton
             label="Contacts Keeper"
             secondary={true}
