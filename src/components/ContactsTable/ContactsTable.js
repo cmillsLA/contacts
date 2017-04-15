@@ -3,10 +3,11 @@ import IconSearch from 'material-ui/svg-icons/action/search';
 import {Table, Column, Cell} from 'fixed-data-table';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import './ContactsTable.css';
 
 /* Demo */
 //var FakeObjectDataListStore = require('./FakeObjectDataListStore');
-var RealObjectDataListStore = require('./RealObjectDataListStore');
+var RealObjectDataListStore = require('../RealObjectDataListStore');
 /* /Demo */
 
 var SortTypes = {

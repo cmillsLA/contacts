@@ -7,8 +7,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './App.css';
 
 // Components.
-import ContactDialog from './components/ContactsDialog';
-import ContactsTable from './components/ContactsTable';
+import ContactsDialog from './components/ContactsDialog/ContactsDialog';
+import ContactsTable from './components/ContactsTable/ContactsTable';
 
 /* DEMO Redux */
 import todoApp from './reducers'
@@ -26,19 +26,17 @@ const muiTheme = getMuiTheme({
   fontFamily: 'Helvetica Neue, Lato, sans-serif',
 });
 
-/*<div className="ck-content">            
-  <VisibleTodoList />
-</div>*/
-
 class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="ck-container">
           <h1 className="ck-h1">Contacts Keeper</h1>
-
+          <div className="ck-content">            
+            <VisibleTodoList />
+          </div>
           <div className="ck-content">
-            <ContactDialog />
+            <ContactsDialog />
             <div className="ck-container">
               <ContactsTable />
             </div>

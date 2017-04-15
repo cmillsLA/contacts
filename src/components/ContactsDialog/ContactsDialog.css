@@ -1,0 +1,13 @@
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+	.ck-btn-contacts-keeper {
+		padding-right:20px;
+	}
+}
+@media only screen and (min-width : 320px) and (max-width : 767px) {
+	.ck-dialog-content {
+		width:95% !important;
+	}
+	.ck-btn-contacts-keeper {
+		padding-right:0;
+	}
+}

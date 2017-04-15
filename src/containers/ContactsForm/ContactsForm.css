@@ -1,0 +1,29 @@
+.ck-dialog-cancel {
+	position: absolute !important;
+	top:5px;
+	right:10px;
+	min-width:40px !important;
+}
+.ck-dialog-save {
+	position:absolute !important;
+	bottom:-3px;
+	right:0;
+}
+.ck-btn-dialog button,
+.ck-btn-dialog button div {
+	height: 38px !important;
+	line-height: 34px !important;
+}
+h3 {
+	border-bottom:0 !important;
+}
+.ck-dialog-header {
+	background-color:#216fb5;
+	margin-bottom:20px;
+	color:#fff !important;
+}
+.ck-form-contacts {
+	position:relative;
+	padding-top:20px;
+	padding-bottom:45px;
+}

@@ -6,7 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import IconNavCancelCircle from 'material-ui/svg-icons/navigation/cancel';
 import IconSearch from 'material-ui/svg-icons/action/search';
-import ContactsForm from '../containers/ContactsForm';
+import ContactsForm from '../../containers/ContactsForm/ContactsForm';
+import './ContactsDialog.css';
 
 class ContactsDialog extends React.Component {
   state = {
