@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "babel-polyfill": "^6.23.0",
+    "create-react-class": "^15.5.2",
     "fixed-data-table": "^0.6.3",
     "material-ui": "^0.17.3",
     "prop-types": "^15.5.8",
