@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import './App.css';
+import './styles/App.css';
 
 // Components.
 import ContactsDialog from './components/ContactsDialog/ContactsDialog';

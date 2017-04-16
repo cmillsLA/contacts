@@ -15,8 +15,7 @@ injectTapEventPlugin();
 //
 
 import App from './App';
-import './index.css';
-import './fixed-data-table.min.css';
+import './styles/fixed-data-table.min.css';
 
 ReactDOM.render(
 	<Provider store={store}>

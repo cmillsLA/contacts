@@ -24,7 +24,7 @@ const styles = {
   },
   hintStyles: {
     bottom:'27px',
-    left: '5px'
+    left: '6px'
   },
   errorStyles: {
     top:'1px',
