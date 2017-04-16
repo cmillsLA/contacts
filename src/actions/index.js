@@ -1,8 +1,8 @@
-let nextTodoId = 0
-export const addTodo = (firstName, lastName, dob, phone, email, notes) => {
+let nextContactId = 0
+export const addContact = (firstName, lastName, dob, phone, email, notes) => {
   return {
-    type: 'ADD_TODO',
-    id: nextTodoId++,
+    type: 'ADD_CONTACT',
+    id: nextContactId++,
     firstName: firstName,
     lastName: lastName,
     dob: dob,

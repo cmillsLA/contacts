@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import todos from './todos'
+import contacts from './contacts'
 
-const todoApp = combineReducers({
-  todos
+const contactsList = combineReducers({
+  contacts
 })
 
-export default todoApp
+export default contactsList

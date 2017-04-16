@@ -42,13 +42,27 @@ th {
 .public_fixedDataTableCell_cellContent {
 	font-size:12px;
 }
+.ck-btn-contact-remove {
+	right:-5px !important;
+	top:-4px !important;
+}
+.ck-btn-contact-remove svg {
+	width:18px !important;
+	height:18px !important;
+}
+.fixedDataTableCellLayout_wrap1 {
+	position:relative !important;
+}
 @media only screen and (min-width : 768px) and (max-width : 1024px) {
 	.ck-table-filter {
 		padding-left:20px;
 	}
 }
 @media only screen and (min-width : 320px) and (max-width : 1024px) {
-	
+	.ck-btn-contact-remove {
+		top:-260px !important;
+		right:-12px !important;
+	}
 	.public_fixedDataTable_main {
 		display:inline-block !important;
 	}
@@ -75,6 +89,9 @@ th {
 	.fixedDataTableCellLayout_wrap3,
 	.fixedDataTableCellGroupLayout_cellGroupWrapper {
 		width:93vw !important;
+	}
+	.fixedDataTableRowLayout_main.public_fixedDataTable_bodyRow {
+		padding-top:10px !important;
 	}
 	.ck-responsive-th {
 		text-transform:capitalize;
@@ -111,7 +128,8 @@ th {
 	}
 	.fixedDataTableRowLayout_main,
 	.public_fixedDataTable_main,
-	.fixedDataTableLayout_rowsContainer {
+	.fixedDataTableLayout_rowsContainer,
+	.fixedDataTableCellLayout_main {
 		overflow:visible !important;
 		position:relative !important;
 	}

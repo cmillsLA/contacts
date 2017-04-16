@@ -4,8 +4,10 @@ import IconSearch from 'material-ui/svg-icons/action/search';
 import {Table, Column, Cell} from 'fixed-data-table';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import IconNavCancelCircle from 'material-ui/svg-icons/navigation/cancel';
 import './ContactsTable.css';
-import { addTodo } from '../../actions';
+import { addContact } from '../../actions';
 
 const SortTypes = {
   ASC: 'ASC',
@@ -70,6 +72,18 @@ const _ckColumnName = (name) => {
   return name.replace(/([A-Z])/g, ' $1').trim();
 }
 
+const TextCellNotes = ({rowIndex, data, columnKey, parent, ...props}) => (
+  <Cell {...props}>
+    <span className="ck-responsive-th">{_ckColumnName(columnKey)}</span>
+    {data[rowIndex][columnKey]}
+    <FlatButton
+      onTouchTap={() => parent._removeContact(rowIndex)}
+      icon={<IconNavCancelCircle />}
+      className="ck-dialog-cancel ck-btn-contact-remove"
+    />
+  </Cell>
+);
+
 const TextCell = ({rowIndex, data, columnKey, ...props}) => (
   <Cell {...props}>
     <span className="ck-responsive-th">{_ckColumnName(columnKey)}</span>
@@ -101,7 +115,7 @@ const tablestyles = {
 
 const mapStateToProps = (state) => {
   return {
-    todos: state.todos
+    contacts: state.contacts
   }
 }
 
@@ -128,25 +142,62 @@ class ContactsTable extends React.Component {
     this._onFilterSubmit = this._onFilterSubmit.bind(this);
     this._onBlurChange = this._onBlurChange.bind(this);
     this._setDefaultSortIndexes = this._setDefaultSortIndexes.bind(this);
+    this._addContactFromStorage = this._addContactFromStorage.bind(this);
+    this._removeContact = this._removeContact.bind(this);
 
-    /* DEMO */
-    this._addTodo = this._addTodo.bind(this);
-    /* */
   }
 
   _getListLength() {
     return Object.keys(this.state.sortedDataList).length;
   }
 
-  _addTodo(name, index) {
+  _removeContact(key) {
+    let _sortedDataList = this.state.sortedDataList;
+    let _cache = this.state._cache;
+    const _itemToRemove =_sortedDataList[key];
+    const _matchToCache = (obj) => {
+      for(let j=0; j<Object.keys(_cache).length; j+=1) {
+        if(_itemToRemove.firstName === _cache[j].firstName &&
+          _itemToRemove.lastName === _cache[j].lastName &&
+          _itemToRemove.dob === _cache[j].dob &&
+          _itemToRemove.phone === _cache[j].phone &&
+          _itemToRemove.email === _cache[j].email &&
+          _itemToRemove.notes === _cache[j].notes) {
+          return j;
+        }
+      }
+    }
+    const _updatedList = (obj, key) => {
+      var _updatedCache = [];
+      for(let i=0; i<Object.keys(obj).length; i+= 1) {
+        if(key !== i) {
+          _updatedCache.push(obj[i]);
+        }
+      }
+      return _updatedCache;
+    }
+    
+    let _upatedSortedDataList = _updatedList(_sortedDataList, key);
+    let _updatedCache = _updatedList(_cache, _matchToCache(key));
+    if(this._setDefaultSortIndexes(_upatedSortedDataList)) {
+      this.setState({
+        sortedDataList: _upatedSortedDataList,
+        _cache: _updatedCache
+      });
+      localStorage.setItem('ck-contacts', JSON.stringify(_updatedCache));
+      return true;
+    }
+  }
+
+  _addContactFromStorage(obj) {
     this.props.dispatch(
-      addTodo(
-        '(' + name + ' ' + index + ')',
-        '(last name ' + index + ')',
-        '(test dob ' + index + ')',
-        '(Phone 999-999-9999)',
-        '(testing@test' + index + '.com)',
-        '(Test - ' + index + ')'
+      addContact(
+        obj.firstName,
+        obj.lastName,
+        obj.dob,
+        obj.phone,
+        obj.email,
+        obj.notes
       )
     )
   }
@@ -172,21 +223,23 @@ class ContactsTable extends React.Component {
     } else {
       win.onresize = this._update;
     }
-    this._update();
-    /* Demo */
-    var _tempNames = ['Chris', 'Ken', 'Tim', 'Ruben', 'Willett', 'Christopher'];
-    for(let i = 0; i < 6; i += 1) {
-      this._addTodo(_tempNames[i], i);
+    // Check localStorage for contacts.
+    let _contacts = localStorage.getItem('ck-contacts');
+    if(_contacts) {
+      _contacts = JSON.parse(_contacts);
+      for(let i=0; i<_contacts.length; i+= 1) {
+        this._addContactFromStorage(_contacts[i]);
+      }
     }
-    /* /Demo */
+    this._update();
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      sortedDataList: props.todos,
-      _cache: props.todos
+      sortedDataList: props.contacts,
+      _cache: props.contacts
     })
-    if(this._setDefaultSortIndexes(props.todos)) {
+    if(this._setDefaultSortIndexes(props.contacts)) {
       this._update();
     }
   }
@@ -209,7 +262,7 @@ class ContactsTable extends React.Component {
   }
 
   _onBlurChange(e) {
-    if(!e.target.value) {
+    if(!e.target.value && this._setDefaultSortIndexes(this.state._cache)) {
       this.setState({
         sortedDataList: this.state._cache,
       });
@@ -400,7 +453,7 @@ class ContactsTable extends React.Component {
                 Notes
               </SortHeaderCell>
             }
-            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCellNotes data={sortedDataList} parent={this} /> : null}
             width={100}
             flexGrow={3}
           />

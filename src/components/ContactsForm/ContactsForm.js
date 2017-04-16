@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../../actions';
+import { addContact } from '../../actions';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconNavCancelCircle from 'material-ui/svg-icons/navigation/cancel';
@@ -59,7 +59,7 @@ class ContactsForm extends React.Component {
     this._handleFieldValidation = this._handleFieldValidation.bind(this);
     this._handleValidation = this._handleValidation.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
-    this._addTodo = this._addTodo.bind(this);
+    this._addContact = this._addContact.bind(this);
     this.setState = this.setState.bind(this);
   }
 
@@ -87,17 +87,40 @@ class ContactsForm extends React.Component {
     return false;
   }*/
 
-  _addTodo() {
-    this.props.dispatch(
-      addTodo(
-        this.state.firstName.value,
-        this.state.lastName.value,
-        this.state.dob.value,
-        this.state.phone.value,
-        this.state.email.value,
-        this.state.notes.value
+  _addContactToStorage(contactObj) {
+    let _contacts = localStorage.getItem('ck-contacts');
+    if(_contacts) {
+      const _contactsLength = _contacts.length;
+      _contacts = JSON.parse(_contacts);
+      _contacts.push(contactObj);
+    } else {
+      _contacts = [contactObj];
+    }
+    localStorage.setItem('ck-contacts', JSON.stringify(_contacts));
+    return true;
+  }
+
+  _addContact(contactObj) {
+    var _contactObj = {
+      firstName: this.state.firstName.value,
+      lastName: this.state.lastName.value,
+      dob: this.state.dob.value,
+      phone: this.state.phone.value,
+      email: this.state.email.value,
+      notes: this.state.notes.value
+    }
+    if(this._addContactToStorage(_contactObj)) {
+      this.props.dispatch(
+        addContact(
+          _contactObj.firstName,
+          _contactObj.lastName,
+          _contactObj.dob,
+          _contactObj.phone,
+          _contactObj.email,
+          _contactObj.notes
+        )
       )
-    )
+    }
     return true;
   }
 
@@ -177,7 +200,7 @@ class ContactsForm extends React.Component {
 
   _handleSubmit(e) {
     e.preventDefault();
-    if(this._handleValidation(true) && this._addTodo()) {
+    if(this._handleValidation(true) && this._addContact()) {
       this._showSnackbar();
     }
   }

@@ -1,6 +1,6 @@
-const todo = (state = {}, action) => {
+const contact = (state = {}, action) => {
   switch (action.type) {
-    case 'ADD_TODO':
+    case 'ADD_CONTACT':
       return {
         id: action.id,
         firstName: action.firstName,
@@ -15,16 +15,16 @@ const todo = (state = {}, action) => {
   }
 }
 
-const todos = (state = [], action) => {
+const contacts = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_TODO':
+    case 'ADD_CONTACT':
       return [
         ...state,
-        todo(undefined, action)
+        contact(undefined, action)
       ]
     default:
       return state
   }
 }
 
-export default todos
+export default contacts

@@ -3,9 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import todoApp from './reducers';
+import contactsList from './reducers';
 
-let store = createStore(todoApp);
+let store = createStore(contactsList);
 
 // Temporarily needed for Material UI
 import injectTapEventPlugin from 'react-tap-event-plugin';
