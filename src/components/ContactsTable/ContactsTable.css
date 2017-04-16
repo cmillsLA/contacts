@@ -40,7 +40,7 @@ th {
 	cursor:pointer;
 }
 .public_fixedDataTableCell_cellContent {
-	font-size:12px;
+	font-size:14px !important;
 }
 .ck-btn-contact-remove {
 	right:-5px !important;
