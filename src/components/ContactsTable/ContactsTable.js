@@ -16,13 +16,22 @@ function reverseSortDirection(sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
 }
 
-let NoContacts = (elemState) => {
+const NoContacts = (elemState) => {
   if(elemState.noContacts) {
     return(
       <div className="ck-mt20">Please add a contact by using the Contacts Keeper button above.</div>
     )
   }
-  return false
+  return false;
+}
+
+const NoResults = (elemState) => {
+  if(elemState.noResults) {
+    return(
+      <div className="ck-mt20">No results found.</div>
+    )
+  }
+  return false;
 }
 
 class SortHeaderCell extends React.Component {
@@ -63,28 +72,10 @@ function _ckColumnName(name) {
 
 const TextCell = ({rowIndex, data, columnKey, ...props}) => (
   <Cell {...props}>
-    {console.log('textcell data', data)}
     <span className="ck-responsive-th">{_ckColumnName(columnKey)}</span>
     {data[rowIndex][columnKey]}
   </Cell>
 );
-
-class DataListWrapper {
-  constructor(indexMap, data) {
-    this._indexMap = indexMap;
-    this._data = data;
-  }
-
-  getSize() {
-    return this._indexMap.length;
-  }
-
-  getObjectAt(index) {
-    return this._data.getObjectAt(
-      this._indexMap[index],
-    );
-  }
-}
 
 const tablestyles = {
   errorStyle: {
@@ -109,7 +100,6 @@ const tablestyles = {
 };
 
 const mapStateToProps = (state) => {
-  console.log('map state to props', state);
   return {
     todos: state.todos
   }
@@ -119,21 +109,15 @@ class ContactsTable extends React.Component {
   constructor(props) {
     super(props);
 
-    this._defaultSortIndexes = [];
-
     this.state = {
       colSortDirs: {},
       tableWidth  : 1000,
       tableHeight : 500,
       filterval: '',
-      sortedDataList: []
+      sortedDataList: [],
+      _cache: [],
+      _defaultSortIndexes: []
     };
-
-    //var size = this._dataList.getSize();
-    var size =  Object.keys(this.state.sortedDataList).length;
-    for (var index = 0; index < size; index++) {
-      this._defaultSortIndexes.push(index);
-    }
 
     this.ckTableWidth = window.offsetWidth - 80;
 
@@ -143,6 +127,7 @@ class ContactsTable extends React.Component {
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onFilterSubmit = this._onFilterSubmit.bind(this);
     this._onBlurChange = this._onBlurChange.bind(this);
+    this._setDefaultSortIndexes = this._setDefaultSortIndexes.bind(this);
 
     /* DEMO */
     this._addTodo = this._addTodo.bind(this);
@@ -153,10 +138,10 @@ class ContactsTable extends React.Component {
     return Object.keys(this.state.sortedDataList).length;
   }
 
-  _addTodo(index) {
+  _addTodo(name, index) {
     this.props.dispatch(
       addTodo(
-        '(first name ' + index + ')',
+        '(' + name + ' ' + index + ')',
         '(last name ' + index + ')',
         '(test dob ' + index + ')',
         '(Phone 999-999-9999)',
@@ -166,8 +151,20 @@ class ContactsTable extends React.Component {
     )
   }
 
+  _setDefaultSortIndexes(contacts) {
+    let _indexes = [];
+    const size =  Object.keys(contacts).length;
+    for (let i=0; i<size; i++) {
+      _indexes.push(i);
+    }
+    this.setState({
+      _defaultSortIndexes: _indexes
+    })
+    return true;
+  }
+
   componentDidMount() {
-    var win = window;
+    const win = window;
     if (win.addEventListener) {
       win.addEventListener('resize', this._update, false);
     } else if (win.attachEvent) {
@@ -176,16 +173,22 @@ class ContactsTable extends React.Component {
       win.onresize = this._update;
     }
     this._update();
-    for(let i = 0; i < 10; i += 1) {
-      this._addTodo(i);
+    /* Demo */
+    var _tempNames = ['Chris', 'Ken', 'Tim', 'Ruben', 'Willett', 'Christopher'];
+    for(let i = 0; i < 6; i += 1) {
+      this._addTodo(_tempNames[i], i);
     }
+    /* /Demo */
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      sortedDataList: props.todos
+      sortedDataList: props.todos,
+      _cache: props.todos
     })
-    this._update();
+    if(this._setDefaultSortIndexes(props.todos)) {
+      this._update();
+    }
   }
 
   componentWillUnmount() {
@@ -208,20 +211,20 @@ class ContactsTable extends React.Component {
   _onBlurChange(e) {
     if(!e.target.value) {
       this.setState({
-        sortedDataList: this._dataList,
+        sortedDataList: this.state._cache,
       });
     }
   }
 
   _onFilterSubmit(e) {
     e.preventDefault();
-    if (!this.state.filterval) {
+    if (!this.state.filterval && this._setDefaultSortIndexes(this.state._cache)) {
       this.setState({
-        sortedDataList: this._dataList,
+        sortedDataList: this.state._cache,
       });
+      return false;
     }
     var filterBy = this.state.filterval.toLowerCase();
-    //var size = this._dataList.getSize();
     var size = this._getListLength();
     var filteredIndexes = [];
     var filterFound = (firstName, lastName, email) => {
@@ -229,28 +232,20 @@ class ContactsTable extends React.Component {
       lastName.toLowerCase().indexOf(filterBy) !== -1 ||
       email.toLowerCase().indexOf(filterBy) !== -1
     };
+    var _filteredData = {};
     for (var index = 0; index < size; index++) {
-      console.log('running for index: ' + index);
-      /*var {firstName} = this._dataList.getObjectAt(index);
-      var {lastName} = this._dataList.getObjectAt(index);
-      var {email} = this._dataList.getObjectAt(index);*/
-      console.log('filter submit', this.state.sortedDataList[index]);
       var {firstName} = this.state.sortedDataList[index];
       var {lastName} = this.state.sortedDataList[index];
       var {email} = this.state.sortedDataList[index];
-      console.log('firstName: ' + firstName, 'lastName: ' + lastName, 'email: ' + email);
-      console.log('filter found: ' + filterFound(firstName, lastName, email));
+      var _filteredSize = Object.keys(_filteredData).length;
       if (filterFound(firstName, lastName, email)) {
-        filteredIndexes.push(index);
+        _filteredData[_filteredSize] = this.state.sortedDataList[index];
       }
-      console.log('finished', filteredIndexes);
     }
-
+    this._setDefaultSortIndexes(_filteredData);
     this.setState({
-      //sortedDataList: new DataListWrapper(filteredIndexes, this.state.sortedDataList),
-      sortedDataList: new DataListWrapper(filteredIndexes, this.state.sortedDataList),
+      sortedDataList: _filteredData,
     });
-
   }
 
   _update() {
@@ -264,14 +259,11 @@ class ContactsTable extends React.Component {
   }
 
   _onSortChange(columnKey, sortDir) {
-    console.log('on sort change');
-    var sortIndexes = this._defaultSortIndexes.slice();
+    let sortIndexes = this.state._defaultSortIndexes.slice();
     sortIndexes.sort((indexA, indexB) => {
-      /*var valueA = this._dataList.getObjectAt(indexA)[columnKey];
-      var valueB = this._dataList.getObjectAt(indexB)[columnKey];*/
-      var valueA = this.testData.getObjectAt(indexA)[columnKey];
-      var valueB = this.testData.getObjectAt(indexB)[columnKey];
-      var sortVal = 0;
+      let valueA = this.state.sortedDataList[indexA][columnKey];
+      let valueB = this.state.sortedDataList[indexB][columnKey];
+      let sortVal = 0;
       if (valueA > valueB) {
         sortVal = 1;
       }
@@ -281,12 +273,15 @@ class ContactsTable extends React.Component {
       if (sortVal !== 0 && sortDir === SortTypes.ASC) {
         sortVal = (sortVal * -1);
       }
-
       return sortVal;
     });
+    let _sortedIndexes = {};
+    for(let i=0; i<sortIndexes.length; i+=1) {
+      _sortedIndexes[i] = this.state.sortedDataList[sortIndexes[i]];
+    }
 
     this.setState({
-      sortedDataList: new DataListWrapper(sortIndexes, this.state.sortedDataList),
+      sortedDataList: _sortedIndexes,
       colSortDirs: {
         [columnKey]: sortDir,
       },
@@ -294,8 +289,9 @@ class ContactsTable extends React.Component {
   }
 
   render() {
-    var {sortedDataList, colSortDirs} = this.state;
-    var _noContacts = !Object.keys(sortedDataList).length;
+    let {sortedDataList, colSortDirs, _cache} = this.state;
+    let _noContacts = !Object.keys(_cache).length;
+    let _noResults = !Object.keys(sortedDataList).length && Object.keys(_cache).length;
     return (
       <div>
         <div className="ck-table-filter ck-row-60-tablet ck-align-left ck-align-center-mobile ck-mb10">
@@ -304,7 +300,7 @@ class ContactsTable extends React.Component {
               className="ck-input-text ck-table-filter-input ck-inline"
               underlineStyle={tablestyles.underlineStyle}
               underlineFocusStyle={tablestyles.underlineFocusStyle}
-              hintText="Search by First Name, Last Name, or Email"
+              hintText="Filter by First Name, Last Name, or Email"
               hintStyle={tablestyles.hintStyles}
               value={this.state.filterval}
               onChange={this._onFilterChange}
@@ -337,7 +333,7 @@ class ContactsTable extends React.Component {
                 First Name
               </SortHeaderCell>
             }
-            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
             width={100}
             flexGrow={1}
           />
@@ -351,7 +347,7 @@ class ContactsTable extends React.Component {
                 Last Name
               </SortHeaderCell>
             }
-            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
             width={100}
             flexGrow={1}
           />
@@ -365,7 +361,7 @@ class ContactsTable extends React.Component {
                 Date of Birth
               </SortHeaderCell>
             }
-            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
             width={85}
           />
           <Column
@@ -378,7 +374,7 @@ class ContactsTable extends React.Component {
                 Phone
               </SortHeaderCell>
             }
-            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
             width={120}
           />
           <Column
@@ -391,7 +387,7 @@ class ContactsTable extends React.Component {
                 Email
               </SortHeaderCell>
             }
-            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
             width={125}
             flexGrow={2}
           />
@@ -405,12 +401,13 @@ class ContactsTable extends React.Component {
                 Notes
               </SortHeaderCell>
             }
-            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
+            cell={!_noContacts && !_noResults ? <TextCell data={sortedDataList} /> : null}
             width={100}
             flexGrow={3}
           />
         </Table>
         <NoContacts className="ck-no-contacts" noContacts={_noContacts} />
+        <NoResults className="ck-no-contacts" noResults={_noResults} />
       </div>
     );
   }
