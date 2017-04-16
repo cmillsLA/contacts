@@ -1,5 +1,6 @@
-1. Datatable feed from store
-2. Hookup filter and search
+1. Hookup filter and search
+2. PropTypes in Todo.js
+3. Rename all Todo Files and components
 4. Unit tests
 
 

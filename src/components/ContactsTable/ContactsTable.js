@@ -6,7 +6,6 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import './ContactsTable.css';
 import { addTodo } from '../../actions';
-import store from '../../index';
 
 var SortTypes = {
   ASC: 'ASC',
@@ -64,6 +63,7 @@ function _ckColumnName(name) {
 
 const TextCell = ({rowIndex, data, columnKey, ...props}) => (
   <Cell {...props}>
+    {console.log('textcell data', data)}
     <span className="ck-responsive-th">{_ckColumnName(columnKey)}</span>
     {data[rowIndex][columnKey]}
   </Cell>
@@ -119,9 +119,6 @@ class ContactsTable extends React.Component {
   constructor(props) {
     super(props);
 
-    //this._dataList = new FakeObjectDataListStore(1);
-    //this._dataList = [];
-
     this._defaultSortIndexes = [];
 
     this.state = {
@@ -134,7 +131,6 @@ class ContactsTable extends React.Component {
 
     //var size = this._dataList.getSize();
     var size =  Object.keys(this.state.sortedDataList).length;
-    //var size = testData._cache.length;
     for (var index = 0; index < size; index++) {
       this._defaultSortIndexes.push(index);
     }
@@ -151,6 +147,10 @@ class ContactsTable extends React.Component {
     /* DEMO */
     this._addTodo = this._addTodo.bind(this);
     /* */
+  }
+
+  _getListLength() {
+    return Object.keys(this.state.sortedDataList).length;
   }
 
   _addTodo(index) {
@@ -176,12 +176,9 @@ class ContactsTable extends React.Component {
       win.onresize = this._update;
     }
     this._update();
-    var _this = this;
-    setTimeout(function() {
-      for(let i = 0; i < 10; i += 1) {
-        _this._addTodo(i);
-      }
-    }, 5000);
+    for(let i = 0; i < 10; i += 1) {
+      this._addTodo(i);
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -225,8 +222,7 @@ class ContactsTable extends React.Component {
     }
     var filterBy = this.state.filterval.toLowerCase();
     //var size = this._dataList.getSize();
-    //var size = testData._cache.length;
-    var size = 1;
+    var size = this._getListLength();
     var filteredIndexes = [];
     var filterFound = (firstName, lastName, email) => {
       return firstName.toLowerCase().indexOf(filterBy) !== -1 ||
@@ -234,19 +230,25 @@ class ContactsTable extends React.Component {
       email.toLowerCase().indexOf(filterBy) !== -1
     };
     for (var index = 0; index < size; index++) {
+      console.log('running for index: ' + index);
       /*var {firstName} = this._dataList.getObjectAt(index);
       var {lastName} = this._dataList.getObjectAt(index);
       var {email} = this._dataList.getObjectAt(index);*/
-      var {firstName} = this.testData.getObjectAt(index);
-      var {lastName} = this.testData.getObjectAt(index);
-      var {email} = this.testData.getObjectAt(index);
+      console.log('filter submit', this.state.sortedDataList[index]);
+      var {firstName} = this.state.sortedDataList[index];
+      var {lastName} = this.state.sortedDataList[index];
+      var {email} = this.state.sortedDataList[index];
+      console.log('firstName: ' + firstName, 'lastName: ' + lastName, 'email: ' + email);
+      console.log('filter found: ' + filterFound(firstName, lastName, email));
       if (filterFound(firstName, lastName, email)) {
         filteredIndexes.push(index);
       }
+      console.log('finished', filteredIndexes);
     }
 
     this.setState({
-      sortedDataList: new DataListWrapper(filteredIndexes, this._dataList),
+      //sortedDataList: new DataListWrapper(filteredIndexes, this.state.sortedDataList),
+      sortedDataList: new DataListWrapper(filteredIndexes, this.state.sortedDataList),
     });
 
   }
@@ -262,6 +264,7 @@ class ContactsTable extends React.Component {
   }
 
   _onSortChange(columnKey, sortDir) {
+    console.log('on sort change');
     var sortIndexes = this._defaultSortIndexes.slice();
     sortIndexes.sort((indexA, indexB) => {
       /*var valueA = this._dataList.getObjectAt(indexA)[columnKey];
@@ -276,14 +279,14 @@ class ContactsTable extends React.Component {
         sortVal = -1;
       }
       if (sortVal !== 0 && sortDir === SortTypes.ASC) {
-        sortVal = sortVal * -1;
+        sortVal = (sortVal * -1);
       }
 
       return sortVal;
     });
 
     this.setState({
-      sortedDataList: new DataListWrapper(sortIndexes, this._dataList),
+      sortedDataList: new DataListWrapper(sortIndexes, this.state.sortedDataList),
       colSortDirs: {
         [columnKey]: sortDir,
       },
