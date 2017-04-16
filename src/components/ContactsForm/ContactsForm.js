@@ -40,15 +40,14 @@ class ContactsForm extends React.Component {
     super(props);
 
     this.state = {
-      disableSubmit: true
+      disableSubmit: true,
+      firstName: { value: '', error: false },
+      lastName: { value: '', error: false },
+      dob: { value: '', error: false },
+      phone: { value: '', error: false },
+      email: { value: '', error: false },
+      notes: { value: '', error: false },
     };
-
-    for(let field in _formFields) {
-      this.state[_formFields[field]] = {
-        value: '',
-        error: false
-      }
-    }
 
     this._showSnackbar = props.showSnackbar.bind(this);
     this._handleClose = props.handleClose.bind(this);
@@ -82,7 +81,6 @@ class ContactsForm extends React.Component {
   }
 
   /*_disableSubmit() {
-    console.log('disable submit', this.state)
     this.setState({
       disableSubmit: !this._handleValidation()
     })
@@ -90,7 +88,6 @@ class ContactsForm extends React.Component {
   }*/
 
   _addTodo() {
-    console.log('add todo with information: ', this.state);
     this.props.dispatch(
       addTodo(
         this.state.firstName.value,
@@ -110,7 +107,7 @@ class ContactsForm extends React.Component {
   }
 
   _validEmail(_str) {
-    const _emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const _emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return _emailRegex.test(_str);
   }
 
@@ -130,7 +127,7 @@ class ContactsForm extends React.Component {
   }
 
   _handleFieldValidation(field, value) {
-    var _valid = true;
+    let _valid = true;
     switch(field) {
       case 'email':
           _valid = !value || !this._validEmail(value) ? false : true;
@@ -151,7 +148,6 @@ class ContactsForm extends React.Component {
   _handleValidation(printErrors) {
     let _valid = true;
     let _fields = _formFields.slice(0, -1);
-    console.log('fields', _fields);
     for(let field in _fields) {
       const _key = _fields[field];
       const _value = this.state[_key].value;

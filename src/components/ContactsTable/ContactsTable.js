@@ -7,12 +7,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import './ContactsTable.css';
 import { addTodo } from '../../actions';
 
-var SortTypes = {
+const SortTypes = {
   ASC: 'ASC',
   DESC: 'DESC',
 };
 
-function reverseSortDirection(sortDir) {
+const reverseSortDirection = (sortDir) => {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
 }
 
@@ -42,7 +42,7 @@ class SortHeaderCell extends React.Component {
   }
 
   render() {
-    var {sortDir, children, ...props} = this.props;
+    let {onSortChange, sortDir, children, ...props} = this.props;
     return (
       <Cell {...props}>
         <a onClick={this._onSortChange}>
@@ -66,7 +66,7 @@ class SortHeaderCell extends React.Component {
   }
 }
 
-function _ckColumnName(name) {
+const _ckColumnName = (name) => {
   return name.replace(/([A-Z])/g, ' $1').trim();
 }
 
@@ -192,7 +192,7 @@ class ContactsTable extends React.Component {
   }
 
   componentWillUnmount() {
-    var win = window;
+    const win = window;
     if(win.removeEventListener) {
       win.removeEventListener('resize', this._update, false);
     } else if(win.removeEvent) {
@@ -224,20 +224,19 @@ class ContactsTable extends React.Component {
       });
       return false;
     }
-    var filterBy = this.state.filterval.toLowerCase();
-    var size = this._getListLength();
-    var filteredIndexes = [];
-    var filterFound = (firstName, lastName, email) => {
+    const filterBy = this.state.filterval.toLowerCase();
+    const size = this._getListLength();
+    const filterFound = (firstName, lastName, email) => {
       return firstName.toLowerCase().indexOf(filterBy) !== -1 ||
       lastName.toLowerCase().indexOf(filterBy) !== -1 ||
       email.toLowerCase().indexOf(filterBy) !== -1
     };
-    var _filteredData = {};
-    for (var index = 0; index < size; index++) {
-      var {firstName} = this.state.sortedDataList[index];
-      var {lastName} = this.state.sortedDataList[index];
-      var {email} = this.state.sortedDataList[index];
-      var _filteredSize = Object.keys(_filteredData).length;
+    let _filteredData = {};
+    for (let index = 0; index < size; index++) {
+      const {firstName} = this.state.sortedDataList[index];
+      const {lastName} = this.state.sortedDataList[index];
+      const {email} = this.state.sortedDataList[index];
+      const _filteredSize = Object.keys(_filteredData).length;
       if (filterFound(firstName, lastName, email)) {
         _filteredData[_filteredSize] = this.state.sortedDataList[index];
       }
@@ -271,7 +270,7 @@ class ContactsTable extends React.Component {
         sortVal = -1;
       }
       if (sortVal !== 0 && sortDir === SortTypes.ASC) {
-        sortVal = (sortVal * -1);
+        sortVal *= -1
       }
       return sortVal;
     });
