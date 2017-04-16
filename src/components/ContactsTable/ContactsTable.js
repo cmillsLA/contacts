@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux'
 import IconSearch from 'material-ui/svg-icons/action/search';
 import {Table, Column, Cell} from 'fixed-data-table';
 import TextField from 'material-ui/TextField';
@@ -6,9 +7,41 @@ import RaisedButton from 'material-ui/RaisedButton';
 import './ContactsTable.css';
 
 /* Demo */
-//var FakeObjectDataListStore = require('./FakeObjectDataListStore');
-var RealObjectDataListStore = require('../RealObjectDataListStore');
+var FakeObjectDataListStore = require('../FakeObjectDataListStore');
+import { addTodo } from '../../actions';
+import store from '../../index';
+
+console.log(store)
 /* /Demo */
+
+/* DEMO */
+/*const testData = {
+  size: 1,
+  getSize: function() {
+    return 1;
+  },
+  getObjectAt: function(key) {
+    return this._cache[key];
+  },
+  _cache: [{
+    firstName: 'Test First Name',
+    lastName: 'Test Last Name',
+    dob: '05-31-1983',
+    phone: '555-555-5555-',
+    email: 'test@test.com',
+    notes: 'N/A',
+  }]
+};*/
+let testData = [{
+  firstName: 'Test First Name',
+  lastName: 'Test Last Name',
+  dob: '05-31-1983',
+  phone: '555-555-5555-',
+  email: 'test@test.com',
+  notes: 'N/A'
+}]
+console.log('*** test data', testData);
+/* /DEMO */
 
 var SortTypes = {
   ASC: 'ASC',
@@ -58,7 +91,7 @@ function _ckColumnName(name) {
 const TextCell = ({rowIndex, data, columnKey, ...props}) => (
   <Cell {...props}>
     <span className="ck-responsive-th">{_ckColumnName(columnKey)}</span>
-    {data.getObjectAt(rowIndex)[columnKey]}
+    {data[rowIndex][columnKey]}
   </Cell>
 );
 
@@ -101,33 +134,62 @@ const tablestyles = {
   },
 };
 
+const mapStateToProps = (state) => {
+  console.log('map state to props', state);
+  return {
+    todos: state.todos
+  }
+}
+
 class ContactsTable extends React.Component {
   constructor(props) {
     super(props);
 
-    this._dataList = new RealObjectDataListStore(10);
+    //this._dataList = new FakeObjectDataListStore(1);
+    //this._dataList = [];
 
     this._defaultSortIndexes = [];
-    var size = this._dataList.getSize();
-    for (var index = 0; index < size; index++) {
-      this._defaultSortIndexes.push(index);
-    }
 
     this.state = {
-      sortedDataList: this._dataList,
       colSortDirs: {},
       tableWidth  : 1000,
       tableHeight : 500,
-      filterval: ''
+      filterval: '',
+      sortedDataList: testData
     };
+
+    //var size = this._dataList.getSize();
+    var size =  Object.keys(this.state.sortedDataList).length;
+    //var size = testData._cache.length;
+    for (var index = 0; index < size; index++) {
+      this._defaultSortIndexes.push(index);
+    }
 
     this.ckTableWidth = window.offsetWidth - 80;
 
     this._onSortChange = this._onSortChange.bind(this);
     this._update = this._update.bind(this);
+    this._getHeight = this._getHeight.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onFilterSubmit = this._onFilterSubmit.bind(this);
     this._onBlurChange = this._onBlurChange.bind(this);
+
+    /* DEMO */
+    this._addTodo = this._addTodo.bind(this);
+    /* */
+  }
+
+  _addTodo(index) {
+    this.props.dispatch(
+      addTodo(
+        'test: ' + index,
+        'test lastName: ' + index,
+        'test dob: ' + index,
+        '999-999-9999',
+        'testing@test' + index + '.com',
+        'Test - ' + index
+      )
+    )
   }
 
   componentDidMount() {
@@ -140,9 +202,18 @@ class ContactsTable extends React.Component {
       win.onresize = this._update;
     }
     this._update();
+    for(let i = 0; i < 10; i += 1) {
+      this._addTodo(i);
+    }
   }
 
   componentWillReceiveProps(props) {
+    console.log('component will receive props', props);
+    console.log('props todos: ', props.todos);
+    this.setState({
+      sortedDataList: props.todos
+    })
+    console.log('updated state', this.state);
     this._update();
   }
 
@@ -179,7 +250,8 @@ class ContactsTable extends React.Component {
       });
     }
     var filterBy = this.state.filterval.toLowerCase();
-    var size = this._dataList.getSize();
+    //var size = this._dataList.getSize();
+    var size = testData._cache.length;
     var filteredIndexes = [];
     var filterFound = (firstName, lastName, email) => {
       return firstName.toLowerCase().indexOf(filterBy) !== -1 ||
@@ -187,9 +259,12 @@ class ContactsTable extends React.Component {
       email.toLowerCase().indexOf(filterBy) !== -1
     };
     for (var index = 0; index < size; index++) {
-      var {firstName} = this._dataList.getObjectAt(index);
+      /*var {firstName} = this._dataList.getObjectAt(index);
       var {lastName} = this._dataList.getObjectAt(index);
-      var {email} = this._dataList.getObjectAt(index);
+      var {email} = this._dataList.getObjectAt(index);*/
+      var {firstName} = this.testData.getObjectAt(index);
+      var {lastName} = this.testData.getObjectAt(index);
+      var {email} = this.testData.getObjectAt(index);
       if (filterFound(firstName, lastName, email)) {
         filteredIndexes.push(index);
       }
@@ -207,11 +282,17 @@ class ContactsTable extends React.Component {
     });
   }
 
+  _getHeight() {
+    return this.state.sortedDataList && Object.keys(this.state.sortedDataList).length ? ((Object.keys(this.state.sortedDataList).length + 1) * 45) + 2 : 45;
+  }
+
   _onSortChange(columnKey, sortDir) {
     var sortIndexes = this._defaultSortIndexes.slice();
     sortIndexes.sort((indexA, indexB) => {
-      var valueA = this._dataList.getObjectAt(indexA)[columnKey];
-      var valueB = this._dataList.getObjectAt(indexB)[columnKey];
+      /*var valueA = this._dataList.getObjectAt(indexA)[columnKey];
+      var valueB = this._dataList.getObjectAt(indexB)[columnKey];*/
+      var valueA = this.testData.getObjectAt(indexA)[columnKey];
+      var valueB = this.testData.getObjectAt(indexB)[columnKey];
       var sortVal = 0;
       if (valueA > valueB) {
         sortVal = 1;
@@ -261,10 +342,10 @@ class ContactsTable extends React.Component {
         </div>
         <Table
           rowHeight={45}
-          rowsCount={sortedDataList.getSize()}
+          rowsCount={Object.keys(sortedDataList).length ? Object.keys(sortedDataList).length : 1}
           headerHeight={45}
           width={this.state.tableWidth}
-          height={((sortedDataList.getSize() + 1) * 45) + 2}
+          height={this._getHeight()}
           {...this.props}>
           <Column
             columnKey="firstName"
@@ -354,4 +435,6 @@ class ContactsTable extends React.Component {
   }
 }
 
-export default ContactsTable;
+export default connect(mapStateToProps, null)(ContactsTable)
+
+//export default ContactsTable;

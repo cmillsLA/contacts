@@ -1,13 +1,9 @@
-import React, { PropTypes, Component } from 'react';
-import { createStore, bindActionCreators } from 'redux';
+import React from 'react';
 import { connect } from 'react-redux';
 import { addTodo } from '../../actions';
-import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import IconContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import IconNavCancelCircle from 'material-ui/svg-icons/navigation/cancel';
-import IconSearch from 'material-ui/svg-icons/action/search';
 import TextField from 'material-ui/TextField';
 import './ContactsForm.css';
 
@@ -77,6 +73,7 @@ class ContactsForm extends React.Component {
         break;
       case 'phone':
         str = 'phone number';
+        break;
       default:
         str = str.replace(/([A-Z])/g, ' $1').toLowerCase().trim();
     }

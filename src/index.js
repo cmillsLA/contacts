@@ -4,9 +4,8 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import todoApp from './reducers';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-let store = createStore(todoApp)
+let store = createStore(todoApp);
 
 // Temporarily needed for Material UI
 import injectTapEventPlugin from 'react-tap-event-plugin';

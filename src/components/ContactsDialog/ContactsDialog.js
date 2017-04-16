@@ -1,12 +1,9 @@
-import React, { PropTypes, Component } from 'react';
+import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import IconNavCancelCircle from 'material-ui/svg-icons/navigation/cancel';
-import IconSearch from 'material-ui/svg-icons/action/search';
-import ContactsForm from '../../containers/ContactsForm/ContactsForm';
+import ContactsForm from '../ContactsForm/ContactsForm';
 import './ContactsDialog.css';
 
 class ContactsDialog extends React.Component {

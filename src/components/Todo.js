@@ -11,6 +11,7 @@ const Todo = ({ onClick, completed, firstName, lastName, dob, phone, email, note
     {email}
     {notes}
   </li>
+
 )
 
 Todo.propTypes = {

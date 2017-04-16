@@ -1,7 +1,4 @@
-import React, { PropTypes, Component } from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import './App.css';
@@ -11,8 +8,6 @@ import ContactsDialog from './components/ContactsDialog/ContactsDialog';
 import ContactsTable from './components/ContactsTable/ContactsTable';
 
 /* DEMO Redux */
-import todoApp from './reducers'
-//import AddTodo from './containers/AddTodo'
 import VisibleTodoList from './containers/VisibleTodoList'
 /* /DEMO Redux */
 
