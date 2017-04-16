@@ -137,7 +137,6 @@ th {
 	.fixedDataTableLayout_rowsContainer {
 		position:relative !important;
 		height:auto !important;
-		min-height:100vh;
 	}
 	.fixedDataTableCellGroupLayout_cellGroup,
 	.fixedDataTableCellGroupLayout_cellGroup > .public_fixedDataTableCell_main {
@@ -159,6 +158,9 @@ th {
 	}
 	.fixedDataTableCellGroupLayout_cellGroup {
 		transform: none !important;
+	}
+	.fixedDataTableCellGroupLayout_cellGroup {
+		overflow:visible !important;
 	}
 }
 @media only screen and (min-width : 320px) and (max-width : 767px) {
