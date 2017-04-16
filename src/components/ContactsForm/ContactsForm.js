@@ -57,6 +57,7 @@ class ContactsForm extends React.Component {
     this._addErrorMessage = this._addErrorMessage.bind(this);
     this._formatError = this._formatError.bind(this);
     this._handleChange = this._handleChange.bind(this);
+    this._handleFieldValidation = this._handleFieldValidation.bind(this);
     this._handleValidation = this._handleValidation.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
     this._addTodo = this._addTodo.bind(this);
@@ -89,6 +90,7 @@ class ContactsForm extends React.Component {
   }*/
 
   _addTodo() {
+    console.log('add todo with information: ', this.state);
     this.props.dispatch(
       addTodo(
         this.state.firstName.value,
@@ -127,15 +129,33 @@ class ContactsForm extends React.Component {
     return true;
   }
 
+  _handleFieldValidation(field, value) {
+    var _valid = true;
+    switch(field) {
+      case 'email':
+          _valid = !value || !this._validEmail(value) ? false : true;
+        break;
+      case 'phone':
+          _valid = !value || !this._validPhone(value) ? false : true;
+        break;
+      case 'dob':
+          _valid = !value || !this._validDate(value) ? false : true;
+        break;
+      default:
+          _valid = !value ? false : true;
+        break;
+    }
+    return _valid;
+  }
+
   _handleValidation(printErrors) {
     let _valid = true;
-    for(let field in _formFields) {
-      const _key = _formFields[field];
+    let _fields = _formFields.slice(0, -1);
+    console.log('fields', _fields);
+    for(let field in _fields) {
+      const _key = _fields[field];
       const _value = this.state[_key].value;
-      if(_key !== 'notes' && !_value ||
-        (_key === 'email' && !this._validEmail(_value)) ||
-        (_key === 'phone' && !this._validPhone(_value)) ||
-        (_key === 'dob' && !this._validDate(_value))) {
+      if(!this._handleFieldValidation(_key, _value)) {
         if(printErrors === true) {
           this._addErrorMessage(_key, _value);
         }

@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react'
 
-const Todo = ({ onClick, completed, firstName, lastName, dob, phone, email, notes }) => (
-  <li
-    onClick={onClick}
-  >
+const Todo = ({ firstName, lastName, dob, phone, email, notes }) => (
+  <li>
     {firstName}
     {lastName}
     {dob}

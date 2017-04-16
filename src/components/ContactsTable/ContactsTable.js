@@ -5,43 +5,8 @@ import {Table, Column, Cell} from 'fixed-data-table';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import './ContactsTable.css';
-
-/* Demo */
-var FakeObjectDataListStore = require('../FakeObjectDataListStore');
 import { addTodo } from '../../actions';
 import store from '../../index';
-
-console.log(store)
-/* /Demo */
-
-/* DEMO */
-/*const testData = {
-  size: 1,
-  getSize: function() {
-    return 1;
-  },
-  getObjectAt: function(key) {
-    return this._cache[key];
-  },
-  _cache: [{
-    firstName: 'Test First Name',
-    lastName: 'Test Last Name',
-    dob: '05-31-1983',
-    phone: '555-555-5555-',
-    email: 'test@test.com',
-    notes: 'N/A',
-  }]
-};*/
-let testData = [{
-  firstName: 'Test First Name',
-  lastName: 'Test Last Name',
-  dob: '05-31-1983',
-  phone: '555-555-5555-',
-  email: 'test@test.com',
-  notes: 'N/A'
-}]
-console.log('*** test data', testData);
-/* /DEMO */
 
 var SortTypes = {
   ASC: 'ASC',
@@ -50,6 +15,15 @@ var SortTypes = {
 
 function reverseSortDirection(sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
+}
+
+let NoContacts = (elemState) => {
+  if(elemState.noContacts) {
+    return(
+      <div className="ck-mt20">Please add a contact by using the Contacts Keeper button above.</div>
+    )
+  }
+  return false
 }
 
 class SortHeaderCell extends React.Component {
@@ -155,7 +129,7 @@ class ContactsTable extends React.Component {
       tableWidth  : 1000,
       tableHeight : 500,
       filterval: '',
-      sortedDataList: testData
+      sortedDataList: []
     };
 
     //var size = this._dataList.getSize();
@@ -182,12 +156,12 @@ class ContactsTable extends React.Component {
   _addTodo(index) {
     this.props.dispatch(
       addTodo(
-        'test: ' + index,
-        'test lastName: ' + index,
-        'test dob: ' + index,
-        '999-999-9999',
-        'testing@test' + index + '.com',
-        'Test - ' + index
+        '(first name ' + index + ')',
+        '(last name ' + index + ')',
+        '(test dob ' + index + ')',
+        '(Phone 999-999-9999)',
+        '(testing@test' + index + '.com)',
+        '(Test - ' + index + ')'
       )
     )
   }
@@ -202,18 +176,18 @@ class ContactsTable extends React.Component {
       win.onresize = this._update;
     }
     this._update();
-    for(let i = 0; i < 10; i += 1) {
-      this._addTodo(i);
-    }
+    var _this = this;
+    setTimeout(function() {
+      for(let i = 0; i < 10; i += 1) {
+        _this._addTodo(i);
+      }
+    }, 5000);
   }
 
   componentWillReceiveProps(props) {
-    console.log('component will receive props', props);
-    console.log('props todos: ', props.todos);
     this.setState({
       sortedDataList: props.todos
     })
-    console.log('updated state', this.state);
     this._update();
   }
 
@@ -251,7 +225,8 @@ class ContactsTable extends React.Component {
     }
     var filterBy = this.state.filterval.toLowerCase();
     //var size = this._dataList.getSize();
-    var size = testData._cache.length;
+    //var size = testData._cache.length;
+    var size = 1;
     var filteredIndexes = [];
     var filterFound = (firstName, lastName, email) => {
       return firstName.toLowerCase().indexOf(filterBy) !== -1 ||
@@ -317,6 +292,7 @@ class ContactsTable extends React.Component {
 
   render() {
     var {sortedDataList, colSortDirs} = this.state;
+    var _noContacts = !Object.keys(sortedDataList).length;
     return (
       <div>
         <div className="ck-table-filter ck-row-60-tablet ck-align-left ck-align-center-mobile ck-mb10">
@@ -330,6 +306,7 @@ class ContactsTable extends React.Component {
               value={this.state.filterval}
               onChange={this._onFilterChange}
               onBlur={this._onBlurChange}
+              disabled={_noContacts}
             />
             <RaisedButton
               secondary={true}
@@ -357,7 +334,7 @@ class ContactsTable extends React.Component {
                 First Name
               </SortHeaderCell>
             }
-            cell={<TextCell data={sortedDataList} />}
+            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
             width={100}
             flexGrow={1}
           />
@@ -371,7 +348,7 @@ class ContactsTable extends React.Component {
                 Last Name
               </SortHeaderCell>
             }
-            cell={<TextCell data={sortedDataList} />}
+            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
             width={100}
             flexGrow={1}
           />
@@ -385,7 +362,7 @@ class ContactsTable extends React.Component {
                 Date of Birth
               </SortHeaderCell>
             }
-            cell={<TextCell data={sortedDataList} />}
+            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
             width={85}
           />
           <Column
@@ -398,7 +375,7 @@ class ContactsTable extends React.Component {
                 Phone
               </SortHeaderCell>
             }
-            cell={<TextCell data={sortedDataList} />}
+            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
             width={120}
           />
           <Column
@@ -411,7 +388,7 @@ class ContactsTable extends React.Component {
                 Email
               </SortHeaderCell>
             }
-            cell={<TextCell data={sortedDataList} />}
+            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
             width={125}
             flexGrow={2}
           />
@@ -425,11 +402,12 @@ class ContactsTable extends React.Component {
                 Notes
               </SortHeaderCell>
             }
-            cell={<TextCell data={sortedDataList} />}
+            cell={!_noContacts ? <TextCell data={sortedDataList} /> : null}
             width={100}
             flexGrow={3}
           />
         </Table>
+        <NoContacts className="ck-no-contacts" noContacts={_noContacts} />
       </div>
     );
   }

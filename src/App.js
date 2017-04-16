@@ -7,10 +7,6 @@ import './App.css';
 import ContactsDialog from './components/ContactsDialog/ContactsDialog';
 import ContactsTable from './components/ContactsTable/ContactsTable';
 
-/* DEMO Redux */
-import VisibleTodoList from './containers/VisibleTodoList'
-/* /DEMO Redux */
-
 const muiTheme = getMuiTheme({
   palette: {
     textColor: '#464646',
@@ -27,9 +23,6 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="ck-container">
           <h1 className="ck-h1">Contacts Keeper</h1>
-          <div className="ck-content">            
-            <VisibleTodoList />
-          </div>
           <div className="ck-content">
             <ContactsDialog />
             <div className="ck-container">
