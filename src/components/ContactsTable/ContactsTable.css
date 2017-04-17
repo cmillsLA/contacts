@@ -170,6 +170,10 @@ th {
 	.ck-input-text.ck-table-filter-input {
 		width:75% !important;
 	}
+	.ck-input-text hr {
+		width:95% !important;
+		left:2% !important;
+	}
 	.ck-table-filter-input div:first-child {
 		white-space:nowrap;
 		max-width:95%;
