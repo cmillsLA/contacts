@@ -21,7 +21,7 @@ const reverseSortDirection = (sortDir) => {
 const NoContacts = (elemState) => {
   if(elemState.noContacts) {
     return(
-      <div className="ck-mt20">Please add a contact by using the Contacts Keeper button above.</div>
+      <div className="ck-add-contact ck-mt20">Please add a contact by using the<span>Contacts Keeper button above.</span></div>
     )
   }
   return false;

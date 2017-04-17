@@ -181,4 +181,10 @@ th {
 	.public_fixedDataTableCell_cellContent {
 		padding-left:0 !important;
 	}
+	.ck-add-contact {
+		margin-top:0 !important;
+	}
+	.ck-add-contact span {
+		display:block;
+	}
 }
