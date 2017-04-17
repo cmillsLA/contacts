@@ -2,7 +2,7 @@
   "name": "reactjs",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://cmillsla.github.io/contact-ui",
+  "homepage": "http://cmillsla.github.io/contacts-ui",
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "create-react-class": "^15.5.2",

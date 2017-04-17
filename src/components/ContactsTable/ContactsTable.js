@@ -21,7 +21,7 @@ const reverseSortDirection = (sortDir) => {
 const NoContacts = (elemState) => {
   if(elemState.noContacts) {
     return(
-      <div className="ck-add-contact ck-mt20">Please add a contact by using the<span>Contacts Keeper button above.</span></div>
+      <div className="ck-add-contact ck-mt20">Please add a contact by using the <span>Contacts Keeper button above.</span></div>
     )
   }
   return false;
@@ -259,6 +259,11 @@ class ContactsTable extends React.Component {
     this.setState({
       filterval: e.target.value,
     });
+    if(!e.target.value && this._setDefaultSortIndexes(this.state._cache)) {
+      this.setState({
+        sortedDataList: this.state._cache,
+      });
+    }
   }
 
   _onBlurChange(e) {
@@ -272,13 +277,10 @@ class ContactsTable extends React.Component {
   _onFilterSubmit(e) {
     e.preventDefault();
     if (!this.state.filterval && this._setDefaultSortIndexes(this.state._cache)) {
-      this.setState({
-        sortedDataList: this.state._cache,
-      });
       return false;
     }
     const filterBy = this.state.filterval.toLowerCase();
-    const size = this._getListLength();
+    const size = Object.keys(this.state._cache).length;
     const filterFound = (firstName, lastName, email) => {
       return firstName.toLowerCase().indexOf(filterBy) !== -1 ||
       lastName.toLowerCase().indexOf(filterBy) !== -1 ||
@@ -286,12 +288,12 @@ class ContactsTable extends React.Component {
     };
     let _filteredData = {};
     for (let index = 0; index < size; index++) {
-      const {firstName} = this.state.sortedDataList[index];
-      const {lastName} = this.state.sortedDataList[index];
-      const {email} = this.state.sortedDataList[index];
+      const {firstName} = this.state._cache[index];
+      const {lastName} = this.state._cache[index];
+      const {email} = this.state._cache[index];
       const _filteredSize = Object.keys(_filteredData).length;
       if (filterFound(firstName, lastName, email)) {
-        _filteredData[_filteredSize] = this.state.sortedDataList[index];
+        _filteredData[_filteredSize] = this.state._cache[index];
       }
     }
     this._setDefaultSortIndexes(_filteredData);
