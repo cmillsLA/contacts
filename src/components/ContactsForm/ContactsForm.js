@@ -187,14 +187,12 @@ class ContactsForm extends React.Component {
   _handleChange(e, value) {
     const _target = e.target;
     const _value = _target.value;
-    if(_value) {
-      this.setState({
-        [_target.name]: {
-          value: _value,
-          error: false
-        }
-      })
-    }
+    this.setState({
+      [_target.name]: {
+        value: _value,
+        error: false
+      }
+    })
     //return this._disableSubmit();
   };
 
